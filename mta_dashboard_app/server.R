@@ -19,11 +19,12 @@ shinyServer(function(input, output, session) {
                           choices = lines)
     })
     
+    theme = theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "bottom")
     
     output$plat_time = renderPlot({
         df = plat_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
         ggplot(df, aes(date, addl_plat_time, group = period, color = period)) +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            theme +
             geom_point() +
             geom_line() +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
@@ -32,7 +33,7 @@ shinyServer(function(input, output, session) {
     output$train_time = renderPlot({
         df = train_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
         ggplot(df, aes(date, addl_train_time, group = period, color = period)) +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            theme +
             geom_point() +
             geom_line() +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
@@ -41,7 +42,7 @@ shinyServer(function(input, output, session) {
     output$trip_time = renderPlot({
         df = trip_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
         ggplot(df, aes(date, addl_trip_time, group = period, color = period)) +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            theme +
             geom_point() +
             geom_line() +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
@@ -50,11 +51,19 @@ shinyServer(function(input, output, session) {
     output$el_es = renderPlot({
         df = el_es_avail %>% gather("el_or_es", "value", 2:3) %>%  filter(date >= input$date_range[1] & date <= input$date_range[2])
         ggplot(df, aes(date, value, group = el_or_es, color = el_or_es)) +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            theme +
             geom_point() +
             geom_line() +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
             
+    })
+    
+    output$incidents = renderPlot({
+        df = incidents %>% filter(date >= input$date_range[1] & date <= input$date_range[2])
+        ggplot(df, aes(date, fill=category)) +
+            theme +
+            geom_bar() +
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
     })
         
     

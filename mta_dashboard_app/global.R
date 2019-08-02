@@ -20,6 +20,7 @@ el_es_avail = read_csv("Elevator and Escalator Availabiltiy.csv")
 el_es_avail = el_es_avail %>% mutate(date = (parse_date_time(month, "%Y-%m")))
 
 incidents = read_csv("Major Incidents.csv")
+incidents = incidents %>% mutate(date = (parse_date_time(month, "%Y-%m")))
 
 dist_btwn_fail = read_csv("Mean Distance Between Failures.csv")
 

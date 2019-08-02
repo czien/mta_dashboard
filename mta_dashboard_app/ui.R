@@ -36,11 +36,16 @@ shinyUI(fluidPage(
         ),
         
         # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("plat_time"),
-            plotOutput("train_time"),
-            plotOutput("trip_time"),
-            plotOutput("el_es")
-        )
-    ))
+        mainPanel(fluidRow(
+            column(6,
+                   plotOutput("plat_time"),
+                   plotOutput("train_time"),
+                   plotOutput("incidents")),
+            
+            column(6,
+                   plotOutput("trip_time"),
+                   plotOutput("el_es"))
+        ))
+    )
+)
 )
