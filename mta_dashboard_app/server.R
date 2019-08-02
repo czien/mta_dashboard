@@ -8,19 +8,45 @@
 #
 
 library(shiny)
+library(ggplot2)
+library(scales)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+shinyServer(function(input, output, session) {
+    observe({
+        line
+        updateSelectInput(session, "line",
+                          choices = lines)
     })
-
-})
+    
+    
+    output$plat_time = renderPlot({
+        df = plat_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
+        ggplot(df, aes(date, addl_plat_time, group = period, color = period)) +
+            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            geom_point() +
+            geom_line() +
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+    })
+    
+    output$train_time = renderPlot({
+        df = train_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
+        ggplot(df, aes(date, addl_train_time, group = period, color = period)) +
+            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            geom_point() +
+            geom_line() +
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+    })
+    
+    output$trip_time = renderPlot({
+        df = trip_time %>% filter(line == input$line & date >= input$date_range[1] & date <= input$date_range[2])
+        ggplot(df, aes(date, addl_trip_time, group = period, color = period)) +
+            theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+            geom_point() +
+            geom_line() +
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+    })
+    
+    
+}
+)

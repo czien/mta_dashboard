@@ -8,26 +8,38 @@
 #
 
 library(shiny)
+library(dygraphs)
+
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
+    titlePanel("MTA Performance Data"),
+    
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            selectInput(
+                inputId = "line",
+                label = "Line",
+                choices = lines,
+                verbatimTextOutput('line')
+            ),
+            dateRangeInput(
+                "date_range",
+                "Date Range:",
+                start = "2015-01-01",
+                end = "2019-06-01",
+                format = "mm/yy"
+            )
+            
         ),
-
+        
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("plat_time"),
+            plotOutput("train_time"),
+            plotOutput("trip_time")
         )
-    )
-))
+    ))
+)
