@@ -28,24 +28,27 @@ shinyUI(fluidPage(
             dateRangeInput(
                 "date_range",
                 "Date Range:",
-                start = "2015-01-01",
+                start = "2018-06-01",
                 end = "2019-06-01",
+                min = "2015-01-01",
                 format = "mm/yy"
-            )
+            ),
+            width = 2
             
         ),
         
         # Show a plot of the generated distribution
         mainPanel(fluidRow(
-            column(6,
-                   plotOutput("plat_time"),
-                   plotOutput("train_time"),
-                   plotOutput("incidents")),
+            column(
+                6,
+                plotOutput("plat_time"),
+                plotOutput("train_time"),
+                plotOutput("incidents")
+            ),
             
             column(6,
                    plotOutput("trip_time"),
                    plotOutput("el_es"))
         ))
     )
-)
-)
+))

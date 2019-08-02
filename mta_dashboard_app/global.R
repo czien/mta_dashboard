@@ -1,6 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(zoo)
+library(reshape2)
 
 setwd("data/")
 
@@ -21,6 +22,11 @@ el_es_avail = el_es_avail %>% mutate(date = (parse_date_time(month, "%Y-%m")))
 
 incidents = read_csv("Major Incidents.csv")
 incidents = incidents %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+incident_categories = unique(incidents$category)
+tmp = spread(incidents, category, count)
+tmp[is.na(tmp)] = 0
+incidents = melt(tmp, id.vars = colnames(tmp[1:4]), measure.vars = colnames(tmp[5:10])) %>% 
+  rename(category = variable, count = value)
 
 dist_btwn_fail = read_csv("Mean Distance Between Failures.csv")
 
@@ -30,4 +36,3 @@ station_pes = read_csv("Station PES.csv")
 
 
 lines = sort(unique(serv_del$line))
-
