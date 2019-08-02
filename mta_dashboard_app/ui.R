@@ -39,7 +39,8 @@ shinyUI(fluidPage(
         mainPanel(
             plotOutput("plat_time"),
             plotOutput("train_time"),
-            plotOutput("trip_time")
+            plotOutput("trip_time"),
+            plotOutput("el_es")
         )
     ))
 )

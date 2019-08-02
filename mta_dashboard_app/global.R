@@ -16,6 +16,9 @@ trip_time = read_csv("Customer Journey Time Performance.csv")
 trip_time = trip_time %>% dplyr::rename(addl_trip_time = `customer journey time performance`)
 trip_time = trip_time %>% mutate(date = (parse_date_time(month, "%Y-%m")))
 
+el_es_avail = read_csv("Elevator and Escalator Availabiltiy.csv")
+el_es_avail = el_es_avail %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+
 incidents = read_csv("Major Incidents.csv")
 
 dist_btwn_fail = read_csv("Mean Distance Between Failures.csv")
@@ -24,7 +27,6 @@ serv_del = read_csv("Service Delivered.csv")
 
 station_pes = read_csv("Station PES.csv")
 
-el_es_avail = read_csv("Elevator and Escalator Availabiltiy.csv")
 
 lines = sort(unique(serv_del$line))
 
