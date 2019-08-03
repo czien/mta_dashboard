@@ -3,36 +3,32 @@ library(lubridate)
 library(zoo)
 library(reshape2)
 
+fix_date = function(df){
+  return (df %>% mutate(date = (parse_date_time(month, "%Y-%m"))))
+}
+
 setwd("data/")
 
-plat_time = read_csv("Additional Platform Time.csv")
-plat_time = plat_time %>% dplyr::rename(addl_plat_time = `additional platform time`)
-plat_time = plat_time %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+plat_time = fix_date(read_csv("Additional Platform Time.csv")) %>% dplyr::rename(addl_plat_time = `additional platform time`)
 
-train_time = read_csv("Additional Train Time.csv")
-train_time = train_time %>% dplyr::rename(addl_train_time = `additional train time`)
-train_time = train_time %>% mutate(date = (parse_date_time(month, "%Y-%m")))
 
-trip_time = read_csv("Customer Journey Time Performance.csv")
-trip_time = trip_time %>% dplyr::rename(addl_trip_time = `customer journey time performance`)
-trip_time = trip_time %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+train_time = fix_date(read_csv("Additional Train Time.csv")) %>% dplyr::rename(addl_train_time = `additional train time`)
 
-el_es_avail = read_csv("Elevator and Escalator Availabiltiy.csv")
-el_es_avail = el_es_avail %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+trip_time = fix_date(read_csv("Customer Journey Time Performance.csv")) %>% dplyr::rename(addl_trip_time = `customer journey time performance`)
 
-incidents = read_csv("Major Incidents.csv")
-incidents = incidents %>% mutate(date = (parse_date_time(month, "%Y-%m")))
+el_es_avail = fix_date(read_csv("Elevator and Escalator Availabiltiy.csv"))
+
+incidents = fix_date(read_csv("Major Incidents.csv"))
 incident_categories = unique(incidents$category)
 tmp = spread(incidents, category, count)
 tmp[is.na(tmp)] = 0
 incidents = melt(tmp, id.vars = colnames(tmp[1:4]), measure.vars = colnames(tmp[5:10])) %>% 
   rename(category = variable, count = value)
 
-dist_btwn_fail = read_csv("Mean Distance Between Failures.csv")
+serv_del = fix_date(read_csv("Service Delivered.csv"))
 
-serv_del = read_csv("Service Delivered.csv")
+station_pes = fix_date(read_csv("Station PES.csv"))
 
-station_pes = read_csv("Station PES.csv")
-
+dist_btwn_fail = fix_date(read_csv("Mean Distance Between Failures.csv"))
 
 lines = sort(unique(serv_del$line))
