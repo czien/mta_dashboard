@@ -48,7 +48,8 @@ shinyUI(fluidPage(
             
             column(6,
                    plotOutput("trip_time"),
-                   plotOutput("el_es"))
+                   plotOutput("el_es"),
+                   plotOutput("serv_del"))
         ))
     )
 ))

@@ -90,4 +90,18 @@ shinyServer(function(input, output, session) {
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
     })
     
+    output$serv_del = renderPlot({
+        df = melt(serv_del, id.vars = colnames(serv_del[c(7,3)]), measure.vars = colnames(serv_del[c(4:6)])) %>%
+            rename(metric = variable) %>% filter(date >= input$date_range[1] & date <= input$date_range[2])
+        
+        sched_trains_df =  df %>%  filter(metric %in% c("num_sched_trains", "num_actual_trains"))
+        serv_del_df = df %>% filter(metric == "service delivered")
+        
+        ggplot(df, aes(date, value, group = as.factor(metric), fill = as.factor(metric))) +
+            theme +
+            geom_bar(data=sched_trains_df, position = "identity", stat = "identity") +
+            coord_cartesian(ylim = c(2500,3500)) +
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+    })
+    
 })

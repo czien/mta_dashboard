@@ -3,7 +3,7 @@ library(lubridate)
 library(zoo)
 library(reshape2)
 
-fix_date = function(df){
+fix_date = function(df) {
   return (df %>% mutate(date = (parse_date_time(month, "%Y-%m"))))
 }
 
@@ -22,7 +22,7 @@ incidents = fix_date(read_csv("Major Incidents.csv"))
 incident_categories = unique(incidents$category)
 tmp = spread(incidents, category, count)
 tmp[is.na(tmp)] = 0
-incidents = melt(tmp, id.vars = colnames(tmp[1:4]), measure.vars = colnames(tmp[5:10])) %>% 
+incidents = melt(tmp, id.vars = colnames(tmp[1:4]), measure.vars = colnames(tmp[5:10])) %>%
   rename(category = variable, count = value)
 
 serv_del = fix_date(read_csv("Service Delivered.csv"))
