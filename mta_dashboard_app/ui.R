@@ -1,29 +1,15 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
 
-library(shiny)
-library(dygraphs)
-
-
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
-    # Application title
     titlePanel("MTA Performance Data"),
     
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
+        sidebarLayout(
         sidebarPanel(
-            selectInput(
-                inputId = "line",
-                label = "Line",
+            pickerInput(
+                "line", "Line",
                 choices = lines,
-                verbatimTextOutput('line')
+                options = list(`actions-box` = TRUE),
+                multiple = T,
+                selected = lines
             ),
             dateRangeInput(
                 "date_range",
@@ -46,10 +32,11 @@ shinyUI(fluidPage(
                 plotOutput("incidents")
             ),
             
-            column(6,
-                   plotOutput("trip_time"),
-                   plotOutput("el_es"),
-                   plotOutput("serv_del"))
+            column(
+                6,
+               plotOutput("trip_time"),
+               plotOutput("el_es"),
+               plotOutput("serv_del"))
         ))
     )
 ))

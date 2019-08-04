@@ -2,6 +2,12 @@ library(tidyverse)
 library(lubridate)
 library(zoo)
 library(reshape2)
+library(shiny)
+library(dygraphs)
+library(scales)
+library(plotly)
+library(shinyWidgets)
+
 
 fix_date = function(df) {
   return (df %>% mutate(date = (parse_date_time(month, "%Y-%m"))))
