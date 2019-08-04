@@ -5,11 +5,11 @@ shinyUI(fluidPage(
         sidebarLayout(
         sidebarPanel(
             pickerInput(
-                "line", "Line",
+                "line", "Line:",
                 choices = lines,
                 options = list(`actions-box` = TRUE),
                 multiple = T,
-                selected = lines
+                selected = "A"
             ),
             dateRangeInput(
                 "date_range",
@@ -23,7 +23,6 @@ shinyUI(fluidPage(
             
         ),
         
-        # Show a plot of the generated distribution
         mainPanel(fluidRow(
             column(
                 6,

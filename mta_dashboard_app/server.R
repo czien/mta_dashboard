@@ -1,11 +1,20 @@
 
 
+
 shinyServer(function(input, output, session) {
     observe({
-        line
         updateSelectInput(session, "line",
                           choices = lines)
+        
+        updateDateRangeInput(
+            session,
+            "date_range",
+            start = "2018-06-01",
+            end = "2019-06-01",
+            min = "2015-01-01"
+        )
     })
+    
     
     theme = theme(axis.text.x = element_text(angle = 90, hjust = 1),
                   legend.position = "bottom")
@@ -53,10 +62,10 @@ shinyServer(function(input, output, session) {
     output$trip_time = renderPlot({
         df = trip_time %>% filter(line %in% input$line &
                                       date >= input$date_range[1] &
-                                      date <= input$date_range[2]) %>% 
-        group_by(date, period) %>% 
-        summarise(addl_trip_time = mean(addl_trip_time)) %>% 
-        mutate(period = period)
+                                      date <= input$date_range[2]) %>%
+            group_by(date, period) %>%
+            summarise(addl_trip_time = mean(addl_trip_time)) %>%
+            mutate(period = period)
         ggplot(df,
                aes(
                    date,
@@ -72,9 +81,9 @@ shinyServer(function(input, output, session) {
     
     output$el_es = renderPlot({
         df = el_es_avail %>% gather("el_or_es", "value", 2:3) %>%  filter(date >= input$date_range[1] &
-                                                                              date <= input$date_range[2]) %>% 
-        group_by(date, el_or_es) %>% 
-        summarise(value = mean(value))
+                                                                              date <= input$date_range[2]) %>%
+            group_by(date, el_or_es) %>%
+            summarise(value = mean(value))
         ggplot(df, aes(date, value, group = el_or_es, color = el_or_es)) +
             theme +
             geom_point() +
@@ -86,8 +95,8 @@ shinyServer(function(input, output, session) {
     output$incidents = renderPlot({
         df = incidents %>% filter(line %in% input$line &
                                       date >= input$date_range[1] &
-                                      date <= input$date_range[2]) %>% 
-            group_by(date,category) %>% 
+                                      date <= input$date_range[2]) %>%
+            group_by(date, category) %>%
             summarise(count = sum(count))
         ggplot(df,
                aes(
@@ -102,31 +111,30 @@ shinyServer(function(input, output, session) {
         
     })
     
+    
     output$serv_del = renderPlot({
-        df = melt(
-            serv_del,
-            id.vars = colnames(serv_del[c(7, 3)]),
-            measure.vars = colnames(serv_del[c(4:6)])
-        ) %>%
-            rename(metric = variable) %>% filter(date >= input$date_range[1] &
-                                                     date <= input$date_range[2])
-        
-        sched_trains_df =  df %>%  filter(metric %in% c("num_sched_trains", "num_actual_trains"))
-        serv_del_df = df %>% filter(metric == "service delivered")
-        
-        ggplot(df,
-               aes(
-                   date,
-                   value,
-                   group = as.factor(metric),
-                   fill = as.factor(metric)
-               )) +
+        df = serv_del[, -6] %>%
+            mutate(dif = num_sched_trains - num_actual_trains) %>% 
+            gather("metric", "value", 5,7) %>%
+            group_by(date, metric) %>%
+            summarise(value = sum(value)) %>%
+            filter(line %in% input$line &
+                       date >= input$date_range[1] &
+                       date <= input$date_range[2])
+        trains_vec = df$value[df$metric == "num_actual_trains"]
+        difs_vec = df$value[df$metric == "dif"]
+        g = ggplot(df,
+                   aes(
+                       date,
+                       value,
+                       group = as.factor(metric),
+                       fill = as.factor(metric)
+                   )) +
             theme +
-            geom_bar(data = sched_trains_df,
-                     position = "identity",
-                     stat = "identity") +
-            coord_cartesian(ylim = c(2500, 3500)) +
-            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+            scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
+            geom_area() +
+            coord_cartesian(ylim = c(min(trains_vec),max(trains_vec+difs_vec)))
+        plot(g)
     })
     
 })
