@@ -1,11 +1,12 @@
 
+
 shinyUI(fluidPage(
     titlePanel("MTA Performance Data"),
-    
-        sidebarLayout(
+    sidebarLayout(
         sidebarPanel(
             pickerInput(
-                "line", "Line:",
+                "line",
+                "Line:",
                 choices = lines,
                 options = list(`actions-box` = TRUE),
                 multiple = T,
@@ -33,9 +34,10 @@ shinyUI(fluidPage(
             
             column(
                 6,
-               plotOutput("trip_time"),
-               plotOutput("el_es"),
-               plotOutput("serv_del"))
+                plotOutput("trip_time"),
+                plotOutput("el_es"),
+                plotOutput("serv_del")
+            )
         ))
     )
 ))

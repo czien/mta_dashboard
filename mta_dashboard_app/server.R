@@ -1,18 +1,14 @@
 
 
 
+
+
+
 shinyServer(function(input, output, session) {
     observe({
-        updateSelectInput(session, "line",
-                          choices = lines)
-        
-        updateDateRangeInput(
-            session,
-            "date_range",
-            start = "2018-06-01",
-            end = "2019-06-01",
-            min = "2015-01-01"
-        )
+        updatePickerInput(session, "line",
+                          choices = lines,
+                          selected = lines)
     })
     
     
@@ -113,28 +109,27 @@ shinyServer(function(input, output, session) {
     
     
     output$serv_del = renderPlot({
-        df = serv_del[, -6] %>%
-            mutate(dif = num_sched_trains - num_actual_trains) %>% 
-            gather("metric", "value", 5,7) %>%
+        df = serv_del[,-6] %>%
+            mutate(dif = num_sched_trains - num_actual_trains) %>%
+            gather("metric", "value", 5, 7) %>%
             group_by(date, metric) %>%
             summarise(value = sum(value)) %>%
-            filter(line %in% input$line &
-                       date >= input$date_range[1] &
+            filter(date >= input$date_range[1] &
                        date <= input$date_range[2])
         trains_vec = df$value[df$metric == "num_actual_trains"]
         difs_vec = df$value[df$metric == "dif"]
-        g = ggplot(df,
-                   aes(
-                       date,
-                       value,
-                       group = as.factor(metric),
-                       fill = as.factor(metric)
-                   )) +
+        ggplot(df,
+               aes(
+                   date,
+                   value,
+                   group = as.factor(metric),
+                   fill = as.factor(metric)
+               )) +
             theme +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
             geom_area() +
-            coord_cartesian(ylim = c(min(trains_vec),max(trains_vec+difs_vec)))
-        plot(g)
+            coord_cartesian(ylim = c(min(trains_vec), max(trains_vec + difs_vec)))
+        
     })
     
 })
