@@ -128,7 +128,7 @@ shinyServer(function(input, output, session) {
             theme +
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
             geom_area() +
-            coord_cartesian(ylim = c(min(trains_vec), max(trains_vec + difs_vec)))
+            coord_cartesian(ylim = c(min(trains_vec)*.85, max(trains_vec + difs_vec)*1.1))
         
     })
     
