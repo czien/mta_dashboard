@@ -37,7 +37,7 @@ shinyServer(function(input, output, session) {
     
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
-                           y = -.5, x = 1)) 
+                           y = -.5, x = 0.4)) 
   })
   
   output$train_time = renderPlotly({
@@ -56,11 +56,12 @@ shinyServer(function(input, output, session) {
       scale_color_brewer(palette = theme_palette) +
       geom_point() +
       geom_line() +
-      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
+      labs(x = "Date", y = "Average Extra Train Time (Minutes)")
     
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
-                           y = -.5, x = 1)) 
+                           y = -.5, x = 0.4)) 
   })
 
   output$on_time_performance = renderPlotly({
@@ -81,11 +82,12 @@ shinyServer(function(input, output, session) {
       scale_color_brewer(palette = theme_palette) +
       geom_point() +
       geom_line() +
-      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
+      labs(x="Date", y="On-Time Performance Ratio")
     
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
-                           y = -.5, x = 1)) 
+                           y = -.5, x = 0.4)) 
   })
   
   output$el_es = renderPlotly({
@@ -98,11 +100,12 @@ shinyServer(function(input, output, session) {
       scale_color_brewer(palette = theme_palette) +
       geom_point() +
       geom_line() +
-      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
+      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
+      labs(x="Date", y="% Functional")
     
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
-                           y = -.5, x = 1)) 
+                           y = -.5, x = 0.3)) 
   })
   
   output$incidents = renderPlotly({
@@ -121,7 +124,8 @@ shinyServer(function(input, output, session) {
       theme +
       scale_fill_brewer(palette = theme_palette) +
       geom_area(position = "stack", stat = "identity") +
-      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")))
+      scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))) +
+      labs(x="Date", y="Count")
     
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
@@ -154,10 +158,11 @@ shinyServer(function(input, output, session) {
       scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y")) +
       geom_area() +
       coord_cartesian(ylim = c(min(trains_vec) * .85, max(trains_vec + difs_vec) *
-                                 1.1))
+                                 1.1)) +
+      labs(x="Date", y="Trains Run vs. Scheduled")
     ggplotly(g) %>% 
       layout(legend = list(orientation = "h",
-                           y = -.5, x = 1)) 
+                           y = -.5, x = 0.3)) 
   })
   
 })
