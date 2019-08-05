@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 shinyServer(function(input, output, session) {
   observe({
     updatePickerInput(session, "line",
@@ -50,7 +44,6 @@ shinyServer(function(input, output, session) {
     g = ggplot(df,
            aes(Date,
                `additional train time`,
-               group = period,
                color = period)) +
       theme +
       scale_color_brewer(palette = theme_palette) +
@@ -75,7 +68,6 @@ shinyServer(function(input, output, session) {
            aes(
              Date,
              on_time_performance,
-             group = period,
              color = period
            )) +
       theme +
@@ -95,7 +87,7 @@ shinyServer(function(input, output, session) {
                                                                         Date <= input$date_range[2]) %>%
       group_by(Date, el_or_es) %>%
       summarise(value = mean(value))
-    g = ggplot(df, aes(Date, value, group = el_or_es, color = el_or_es)) +
+    g = ggplot(df, aes(Date, value, color = el_or_es)) +
       theme +
       scale_color_brewer(palette = theme_palette) +
       geom_point() +
