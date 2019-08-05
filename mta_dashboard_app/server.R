@@ -55,17 +55,17 @@ shinyServer(function(input, output, session) {
             scale_x_datetime(date_breaks = "months", labels = date_format("%b %Y"))
     })
     
-    output$trip_time = renderPlot({
-        df = trip_time %>% filter(line %in% input$line &
+    output$on_time_performance = renderPlot({
+        df = on_time_performance %>% filter(line %in% input$line &
                                       date >= input$date_range[1] &
                                       date <= input$date_range[2]) %>%
             group_by(date, period) %>%
-            summarise(addl_trip_time = mean(addl_trip_time)) %>%
+            summarise(on_time_performance = mean(on_time_performance)) %>%
             mutate(period = period)
         ggplot(df,
                aes(
                    date,
-                   addl_trip_time,
+                   on_time_performance,
                    group = period,
                    color = period
                )) +

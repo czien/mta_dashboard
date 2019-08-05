@@ -24,20 +24,15 @@ shinyUI(fluidPage(
             
         ),
         
-        mainPanel(fluidRow(
-            column(
-                6,
-                plotOutput("plat_time"),
-                plotOutput("train_time"),
-                plotOutput("incidents")
-            ),
-            
-            column(
-                6,
-                plotOutput("trip_time"),
-                plotOutput("el_es"),
-                plotOutput("serv_del")
+        mainPanel(
+            tabsetPanel(
+                tabPanel("On-Time Performance", plotOutput("on_time_performance")),
+                tabPanel("Additional Platform Time", plotOutput("plat_time")),
+                tabPanel("Additional Train Time", plotOutput("train_time")),
+                tabPanel("Incidents", plotOutput("incidents")),
+                tabPanel("Service Delivery", plotOutput("serv_del")),
+                tabPanel("Elevators/Escalators", plotOutput("el_es"))
             )
-        ))
+            
     )
-))
+)))

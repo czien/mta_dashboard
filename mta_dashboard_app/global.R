@@ -20,7 +20,7 @@ plat_time = fix_date(read_csv("Additional Platform Time.csv")) %>% dplyr::rename
 
 train_time = fix_date(read_csv("Additional Train Time.csv")) %>% dplyr::rename(addl_train_time = `additional train time`)
 
-trip_time = fix_date(read_csv("Customer Journey Time Performance.csv")) %>% dplyr::rename(addl_trip_time = `customer journey time performance`)
+on_time_performance = fix_date(read_csv("Customer Journey Time Performance.csv")) %>% dplyr::rename(on_time_performance = `customer journey time performance`)
 
 el_es_avail = fix_date(read_csv("Elevator and Escalator Availabiltiy.csv"))
 
