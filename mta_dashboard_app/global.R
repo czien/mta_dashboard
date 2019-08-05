@@ -15,10 +15,10 @@ fix_date = function(df) {
 
 setwd("data/")
 
-plat_time = fix_date(read_csv("Additional Platform Time.csv")) %>% dplyr::rename(addl_plat_time = `additional platform time`)
+plat_time = fix_date(read_csv("Additional Platform Time.csv"))
 
 
-train_time = fix_date(read_csv("Additional Train Time.csv")) %>% dplyr::rename(addl_train_time = `additional train time`)
+train_time = fix_date(read_csv("Additional Train Time.csv"))
 
 on_time_performance = fix_date(read_csv("Customer Journey Time Performance.csv")) %>% dplyr::rename(on_time_performance = `customer journey time performance`)
 

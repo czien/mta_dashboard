@@ -10,7 +10,7 @@ shinyUI(fluidPage(
                 choices = lines,
                 options = list(`actions-box` = TRUE),
                 multiple = T,
-                selected = "A"
+                selected = lines
             ),
             dateRangeInput(
                 "date_range",
@@ -26,12 +26,12 @@ shinyUI(fluidPage(
         
         mainPanel(
             tabsetPanel(
-                tabPanel("On-Time Performance", plotOutput("on_time_performance")),
-                tabPanel("Additional Platform Time", plotOutput("plat_time")),
-                tabPanel("Additional Train Time", plotOutput("train_time")),
-                tabPanel("Incidents", plotOutput("incidents")),
-                tabPanel("Service Delivery", plotOutput("serv_del")),
-                tabPanel("Elevators/Escalators", plotOutput("el_es"))
+                tabPanel("On-Time Performance", plotlyOutput("on_time_performance")),
+                tabPanel("Additional Platform Time", plotlyOutput("plat_time")),
+                tabPanel("Additional Train Time", plotlyOutput("train_time")),
+                tabPanel("Incidents", plotlyOutput("incidents")),
+                tabPanel("Service Delivery", plotlyOutput("serv_del")),
+                tabPanel("Elevators/Escalators", plotlyOutput("el_es"))
             )
             
     )
