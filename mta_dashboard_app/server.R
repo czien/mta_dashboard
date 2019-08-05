@@ -19,13 +19,13 @@ shinyServer(function(input, output, session) {
   
   output$plat_time = renderPlotly({
     df = plat_time %>% filter(line %in% input$line &
-                                date >= input$date_range[1] &
-                                date <= input$date_range[2]) %>%
-      group_by(date, period) %>%
+                                Date >= input$date_range[1] &
+                                Date <= input$date_range[2]) %>%
+      group_by(Date, period) %>%
       summarise(`additional platform time` = mean(`additional platform time`)) %>%
       mutate(period = period)
     g = ggplot(df,
-           aes(date,
+           aes(Date,
                `additional platform time`,
                color = period)) +
       theme +
@@ -42,13 +42,13 @@ shinyServer(function(input, output, session) {
   
   output$train_time = renderPlotly({
     df = train_time %>% filter(line %in% input$line &
-                                 date >= input$date_range[1] &
-                                 date <= input$date_range[2]) %>%
-      group_by(date, period) %>%
+                                 Date >= input$date_range[1] &
+                                 Date <= input$date_range[2]) %>%
+      group_by(Date, period) %>%
       summarise(`additional train time` = mean(`additional train time`)) %>%
       mutate(period = period)
     g = ggplot(df,
-           aes(date,
+           aes(Date,
                `additional train time`,
                group = period,
                color = period)) +
@@ -65,14 +65,14 @@ shinyServer(function(input, output, session) {
 
   output$on_time_performance = renderPlotly({
     df = on_time_performance %>% filter(line %in% input$line &
-                                          date >= input$date_range[1] &
-                                          date <= input$date_range[2]) %>%
-      group_by(date, period) %>%
+                                          Date >= input$date_range[1] &
+                                          Date <= input$date_range[2]) %>%
+      group_by(Date, period) %>%
       summarise(on_time_performance = mean(on_time_performance)) %>%
       mutate(period = period)
     g = ggplot(df,
            aes(
-             date,
+             Date,
              on_time_performance,
              group = period,
              color = period
@@ -89,11 +89,11 @@ shinyServer(function(input, output, session) {
   })
   
   output$el_es = renderPlotly({
-    df = el_es_avail %>% gather("el_or_es", "value", 2:3) %>%  filter(date >= input$date_range[1] &
-                                                                        date <= input$date_range[2]) %>%
-      group_by(date, el_or_es) %>%
+    df = el_es_avail %>% gather("el_or_es", "value", 2:3) %>%  filter(Date >= input$date_range[1] &
+                                                                        Date <= input$date_range[2]) %>%
+      group_by(Date, el_or_es) %>%
       summarise(value = mean(value))
-    g = ggplot(df, aes(date, value, group = el_or_es, color = el_or_es)) +
+    g = ggplot(df, aes(Date, value, group = el_or_es, color = el_or_es)) +
       theme +
       scale_color_brewer(palette = theme_palette) +
       geom_point() +
@@ -107,16 +107,16 @@ shinyServer(function(input, output, session) {
   
   output$incidents = renderPlotly({
     df = incidents %>% filter(line %in% input$line &
-                                date >= input$date_range[1] &
-                                date <= input$date_range[2]) %>%
-      group_by(date, category) %>%
+                                Date >= input$date_range[1] &
+                                Date <= input$date_range[2]) %>%
+      mutate(category = as.factor(category)) %>% 
+      group_by(Date, category) %>%
       summarise(count = sum(count))
     g = (ggplot(df,
            aes(
-             date,
+             Date,
              count,
-             group = as.factor(category),
-             fill = as.factor(category)
+             fill = category
            )) +
       theme +
       scale_fill_brewer(palette = theme_palette) +
@@ -131,20 +131,23 @@ shinyServer(function(input, output, session) {
   
   output$serv_del = renderPlotly({
     df = serv_del[, -6] %>%
-      mutate(dif = num_sched_trains - num_actual_trains) %>%
-      gather("metric", "value", 5, 7) %>%
-      group_by(date, metric) %>%
-      summarise(value = sum(value)) %>%
-      filter(date >= input$date_range[1] &
-               date <= input$date_range[2])
-    trains_vec = df$value[df$metric == "num_actual_trains"]
-    difs_vec = df$value[df$metric == "dif"]
+      mutate(Delta = num_sched_trains - num_actual_trains,
+             `Trains Run` = num_actual_trains,
+              Line = line) %>%
+      filter(Line %in% input$line & Date >= input$date_range[1] &
+               Date <= input$date_range[2]) %>% 
+      gather("Metric", "Value", 7,8) %>%
+      group_by(Date, Metric) %>%
+      summarise(Value = sum(Value))
+      
+    
+      trains_vec = df$Value[df$Metric == "Trains Run"]
+    difs_vec = df$Value[df$Metric == "Delta"]
     g = ggplot(df,
            aes(
-             date,
-             value,
-             group = as.factor(metric),
-             fill = as.factor(metric)
+             Date,
+             Value,
+             fill = Metric
            )) +
       theme +
       scale_fill_brewer(palette = theme_palette) +

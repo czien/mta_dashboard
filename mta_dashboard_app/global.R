@@ -10,7 +10,7 @@ library(shinyWidgets)
 
 
 fix_date = function(df) {
-  return (df %>% mutate(date = (parse_date_time(month, "%Y-%m"))))
+  return (df %>% mutate(Date = (parse_date_time(month, "%Y-%m"))))
 }
 
 setwd("data/")
